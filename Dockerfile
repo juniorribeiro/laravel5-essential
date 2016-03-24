@@ -1,4 +1,5 @@
-FROM ubuntu:trusty
+#FROM ubuntu:trusty
+FROM azukiapp/node:0.12
 MAINTAINER Junior Ribeiro
 
 
@@ -9,9 +10,44 @@ RUN echo "deb-src http://ppa.launchpad.net/ondrej/php/ubuntu trusty main" >> /et
 RUN apt-key adv --keyserver keyserver.ubuntu.com --recv-keys E5267A6C 
 RUN apt-get -qq update 
 
-RUN apt-get install -y php7.0 php7.0-fpm php7.0-mcrypt php7.0-mbstring php7.0-xml php7.0-pgsql php7.0-mysql nginx npm nodejs curl git 
-RUN curl -sS https://getcomposer.org/installer | sudo php -- --install-dir=/usr/local/bin --filename=composer
+RUN apt-get install -y \
+php7.0 \
+php7.0-fpm \
+php7.0-mcrypt \
+php7.0-mbstring \
+php7.0-xml \
+php7.0-pgsql \
+php7.0-mysql \
+nginx \
+npm \
+curl \
+git
+#nodejs
+
+#RUN curl -sS https://getcomposer.org/installer | sudo php -- --install-dir=/usr/local/bin --filename=composer
 RUN npm install --save gulp-install 
 
+RUN phpenmod mcrypt 
 
+
+# nginx config
+ADD nginx-default.conf /etc/nginx/sites-available/default
+RUN  echo "daemon off;" >> /etc/nginx/nginx.conf \
+  && echo "fix ownership of sock file for php-fpm as our version of nginx runs as root" \
+  && sed -i -e "s/user www-data/user root/g" /etc/nginx/nginx.conf \
+  && sed -i -e "s/www-data/root/g" /etc/php/7.0/fpm/pool.d/www.conf \
+  && sed -i -e "s/;clear_env = no/clear_env = no/g" /etc/php/7.0/fpm/pool.d/www.conf \
+  && sed -i -e "s/DAEMON_ARGS=\"/DAEMON_ARGS=\"--allow-to-run-as-root /g" /etc/init.d/php7.0-fpm
+
+RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+
+# Add image configuration and scripts
+ADD run.sh /run.sh
+RUN chmod 755 /*.sh
+
+# Configure nginx root with sample app
+ADD sample/ /var/www/public
+
+EXPOSE 80
+CMD ["/run.sh"]
 
