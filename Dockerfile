@@ -18,10 +18,19 @@ php7.0-mbstring \
 php7.0-xml \
 php7.0-pgsql \
 php7.0-mysql \
+php7.0-intl \
+php7.0-curl \
+php7.0-gd \
+php7.0-json \
+php7.0-xsl \
+php7.0-cli \
+php7.0-dev \
+php-pear \
 nginx \
 npm \
 curl \
-git
+git \
+unzip
 #nodejs
 
 #RUN curl -sS https://getcomposer.org/installer | sudo php -- --install-dir=/usr/local/bin --filename=composer
