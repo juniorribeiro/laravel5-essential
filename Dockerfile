@@ -10,7 +10,7 @@ RUN echo "deb-src http://ppa.launchpad.net/ondrej/php/ubuntu trusty main" >> /et
 RUN apt-key adv --keyserver keyserver.ubuntu.com --recv-keys E5267A6C 
 RUN apt-get -qq update 
 
-RUN apt-get install -y -qq\
+RUN apt-get install -y -qq \
 php7.0 \
 php7.0-fpm \
 php7.0-mcrypt \
