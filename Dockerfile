@@ -10,7 +10,7 @@ RUN echo "deb-src http://ppa.launchpad.net/ondrej/php/ubuntu trusty main" >> /et
 RUN apt-key adv --keyserver keyserver.ubuntu.com --recv-keys E5267A6C 
 RUN apt-get -qq update 
 
-RUN apt-get install -y \
+RUN apt-get install -y -qq\
 php7.0 \
 php7.0-fpm \
 php7.0-mcrypt \
@@ -30,7 +30,11 @@ nginx \
 npm \
 curl \
 git \
-unzip
+unzip \
+libxml2 \
+libcurl4-openssl-dev \
+sqlite3 libsqlite3-dev \
+subversion
 #nodejs
 
 #RUN curl -sS https://getcomposer.org/installer | sudo php -- --install-dir=/usr/local/bin --filename=composer
